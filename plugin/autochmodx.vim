@@ -18,9 +18,12 @@ set cpo&vim
 " }}}
 
 
-command! -bar AutoChmodDisable let b:autochmodx_disable_autocmd = 1
-command! -bar AutoChmodEnable  unlet! b:autochmodx_disable_autocmd
-command! -bar AutoChmodRun call s:auto_chmod_run()
+command! -bar AutoChmodDisable
+\   let b:autochmodx_disable_autocmd = 1
+command! -bar AutoChmodEnable
+\   unlet! b:autochmodx_disable_autocmd
+command! -bar AutoChmodRun
+\   call s:auto_chmod_run()
 
 if !get(g:, 'authchmodx_no_autocmd')
     augroup autochmodx
@@ -44,6 +47,7 @@ function! s:auto_chmod_run() "{{{
         return
     endif
 
+    " Prevent |W16| prompt.
     " XXX: 'setlocal autoread' and
     " 'setglobal autoread' and
     " 'autocmd FileChangedShell' also do not work.
