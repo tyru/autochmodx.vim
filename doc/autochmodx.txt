@@ -1,0 +1,105 @@
+*autochmodx.txt* *autochmodx*
+
+Author:
+  tyru <tyru.exe@gmail.com>
+Version: 0.0.0
+License:
+" NEW BSD LICENSE {{{
+"   Copyright (c) 2012, tyru
+"   All rights reserved.
+"
+"   Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+"
+"       * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+"       * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+"       * Neither the name of the tyru nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+"
+"   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+" }}}
+
+==============================================================================
+CONTENTS						*autochmodx-contents*
+
+Introduction		|autochmodx-introduction|
+Requirements		|autochmodx-requirements|
+Interface			|autochmodx-interface|
+  Variables			|autochmodx-variables|
+  Commands			|autochmodx-commands|
+TODO				|autochmodx-todo|
+Changelog			|autochmodx-changelog|
+
+
+==============================================================================
+INTRODUCTION						*autochmodx-introduction* {{{
+
+If a current file looks like an executable script,
+make it by executable running "chmod +x %".
+
+}}}
+==============================================================================
+REQUIREMENTS						*autochmodx-requirements* {{{
+
+This plugin cannot be used on any platform like the following:
+- has("unix") returns 0
+- "chmod" is not in PATH
+
+}}}
+==============================================================================
+INTERFACE				*autochmodx-interface* {{{
+------------------------------------------------------------------------------
+VARIABLES					*autochmodx-variables* {{{
+
+					*g:autochmodx_chmod_opt*
+g:autochmodx_chmod_opt		(Default: "+x")
+	This {value} is passed to "chmod" argument: >
+	chmod {value} %
+<
+					*g:autochmodx_no_BufWritePost_autocmd*
+g:autochmodx_no_BufWritePost_autocmd
+	If this variable is defined and non-zero,
+	|autochmodx| will not execute 'chmod +x' at |BufWritePost|.
+
+					*g:autochmodx_no_CursorHold_autocmd*
+g:autochmodx_no_CursorHold_autocmd
+	If this variable is defined and non-zero,
+	|autochmodx| will not execute 'chmod +x' at |CursorHold|.
+
+}}}
+------------------------------------------------------------------------------
+COMMANDS					*autochmodx-commands* {{{
+
+:AutoChmodDisable			*:AutoChmodDisable*
+	This disables auto-commands of autochmodx.
+	This does not influence |:AutoChmodRun| behavior.
+
+:AutoChmodEnable			*:AutoChmodEnable*
+	This enables auto-commands of autochmodx.
+	This does not influence |:AutoChmodRun| behavior.
+
+:AutoChmodRun				*:AutoChmodRun*
+	Run "chmod +x %".
+
+:AutoChmodRunAutocmd		*:AutoChmodRunAutocmd*
+	Run "chmod +x %" unless |:AutoChmodDisable|
+	has been called in current buffer.
+	This command is called by auto-commands.
+
+}}}
+}}}
+==============================================================================
+TODO						*autochmodx-todo* {{{
+
+any request? ;)
+
+https://github.com/tyru/autochmodx.vim/issues
+
+}}}
+==============================================================================
+CHANGELOG						*autochmodx-changelog* {{{
+
+0.0.0:
+- Upload to github.
+
+}}}
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=4:ft=help:norl:noet:fdm=marker:fen
