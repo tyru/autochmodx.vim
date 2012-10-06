@@ -53,6 +53,10 @@ function! s:auto_chmod_run() "{{{
     set autoread
     try
         !chmod +x %
+        " Reload buffer.
+        silent edit
+        " Load syntax.
+        syntax enable
     catch
         return
     finally
