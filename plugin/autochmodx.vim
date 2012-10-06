@@ -1,0 +1,65 @@
+" vim:foldmethod=marker:fen:
+scriptencoding utf-8
+
+" Load Once {{{
+if (exists('g:loaded_autochmodx') && g:loaded_autochmodx) || &cp
+    finish
+endif
+let g:loaded_autochmodx = 1
+" }}}
+" Saving 'cpoptions' {{{
+let s:save_cpo = &cpo
+set cpo&vim
+" }}}
+
+
+command! -bar AutoChmodDisable let b:disable_auto_chmod = 1
+command! -bar AutoChmodEnable  unlet! b:disable_auto_chmod
+
+augroup autochmodx
+    autocmd!
+    autocmd BufWritePost * call s:auto_chmod()
+augroup END
+
+function! s:check_auto_chmod() "{{{
+    return !exists('b:disable_auto_chmod')
+    \   && has('unix')
+    \   && getfperm(expand('%'))[2] !=# 'x'
+    \   && getline(1) =~# '^#!'
+    \   && executable('chmod')
+endfunction "}}}
+
+function! s:auto_chmod() "{{{
+    if s:check_auto_chmod()
+        " XXX: 'setlocal autoread' and
+        " 'setglobal autoread' and
+        " 'autocmd FileChangedShell' also do not work.
+        " This is expected behavior?
+        let save_global_autoread = &g:autoread
+        let save_local_autoread  = &l:autoread
+        set autoread
+        try
+            " Change permission.
+            !chmod +x %
+
+            redraw
+            call s:echomsg('Special', 'chmod +x '.expand('%').' ... done.')
+            sleep 1
+        catch
+            return
+        finally
+            if save_global_autoread ==# save_local_autoread
+                let &g:autoread = save_global_autoread
+                set autoread<
+            else
+                let &l:autoread = save_local_autoread
+                let &g:autoread = save_global_autoread
+            endif
+        endtry
+    endif
+endfunction "}}}
+
+
+" Restore 'cpoptions' {{{
+let &cpo = s:save_cpo
+" }}}
