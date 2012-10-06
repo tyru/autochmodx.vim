@@ -20,6 +20,7 @@ set cpo&vim
 
 command! -bar AutoChmodDisable let b:disable_auto_chmod = 1
 command! -bar AutoChmodEnable  unlet! b:disable_auto_chmod
+command! -bar AutoChmodExecute call s:auto_chmod()
 
 if !get(g:, 'authchmodx_no_autocmd')
     augroup autochmodx
