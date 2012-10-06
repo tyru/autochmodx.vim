@@ -65,7 +65,7 @@ function! s:auto_chmod_run() "{{{
     let save_local_autoread  = &l:autoread
     set autoread
     try
-        execute '!chmod '.g:autochmodx_chmod_opt.' %'
+        silent execute '!chmod '.g:autochmodx_chmod_opt.' %'
         " Reload buffer.
         silent edit
         " Load syntax.
