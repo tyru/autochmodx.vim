@@ -20,9 +20,34 @@ function! s:echomsg(hl, msg) "{{{
 endfunction "}}}
 
 
+" Validate global variables. {{{1
+
+if !exists('g:autochmodx_chmod_opt')
+    call s:echomsg('Error',
+    \   'autochmodx: error: '
+    \   . 'g:autochmodx_chmod_opt is not found...')
+    let s:autochmodx_disable = 1
+endif
+
+function s:check_chmod_opt(opt) "{{{
+    return a:opt =~# '^[ugoa]*+x$'
+endfunction "}}}
+function! s:validate_chmod_opt(opt) "{{{
+    if !s:check_chmod_opt(a:opt)
+        call s:echomsg('Error', "autochmodx: error: '".a:opt."' is invalid argument for chmod. disable plugin.")
+        let s:autochmodx_disable = 1
+    endif
+endfunction "}}}
+call s:validate_chmod_opt(g:autochmodx_chmod_opt)
+
+
 " Functions {{{1
 
 function! autochmodx#make_it_executable() "{{{
+    if get(s:, 'autochmodx_disable')
+        call s:echomsg('WarningMsg', "autochmodx is disabled.")
+        return
+    endif
     if !s:check_auto_chmod()
         return
     endif
