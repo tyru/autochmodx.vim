@@ -50,12 +50,7 @@ function! s:auto_chmod() "{{{
     let save_local_autoread  = &l:autoread
     set autoread
     try
-        " Change permission.
         !chmod +x %
-
-        redraw
-        call s:echomsg('Special', 'chmod +x '.expand('%').' ... done.')
-        sleep 1
     catch
         return
     finally
@@ -67,6 +62,13 @@ function! s:auto_chmod() "{{{
             let &g:autoread = save_global_autoread
         endif
     endtry
+
+    " Disable auto-commands when 'chmod +x' succeeded.
+    let b:autochmodx_disable_autocmd = 1
+
+    redraw
+    call s:echomsg('Special', 'chmod +x '.expand('%').' ... done.')
+    sleep 1
 endfunction "}}}
 
 function! s:echomsg(hl, msg) "{{{
