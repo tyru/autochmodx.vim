@@ -24,6 +24,10 @@ command! -bar AutoChmodEnable
 \   unlet! b:autochmodx_disable_autocmd
 command! -bar AutoChmodRun
 \   call s:auto_chmod_run()
+command! -bar AutoChmodRunAutocmd
+\   if !get(b:, 'autochmodx_disable_autocmd')
+\ |     call s:auto_chmod_run()
+\ | endif
 
 if !get(g:, 'authchmodx_no_autocmd')
     augroup autochmodx
