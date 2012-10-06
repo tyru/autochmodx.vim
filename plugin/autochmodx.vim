@@ -33,7 +33,9 @@ if !get(g:, 'authchmodx_no_autocmd')
 endif
 
 function! s:check_auto_chmod() "{{{
-    return getfperm(expand('%'))[2] !=# 'x'
+    return !&modified
+    \   && filewritable(expand('%'))
+    \   && getfperm(expand('%'))[2] !=# 'x'
     \   && getline(1) =~# '^#!'
 endfunction "}}}
 
