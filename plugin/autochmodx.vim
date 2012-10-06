@@ -29,15 +29,17 @@ command! -bar AutoChmodRunAutocmd
 \ |     call s:auto_chmod_run()
 \ | endif
 
-if !get(g:, 'authchmodx_no_autocmd')
-    augroup autochmodx
-        autocmd!
-        autocmd BufWritePost *
-        \   if !get(b:, 'autochmodx_disable_autocmd')
-        \ |     call s:auto_chmod_run()
-        \ | endif
-    augroup END
-endif
+
+augroup autochmodx
+    autocmd!
+    if !get(g:, 'autochmodx_no_BufWritePost_autocmd')
+        autocmd BufWritePost * AutoChmodRunAutocmd
+    endif
+    if !get(g:, 'autochmodx_no_CursorHold_autocmd')
+        autocmd CursorHold * AutoChmodRunAutocmd
+    endif
+augroup END
+
 
 function! s:check_auto_chmod() "{{{
     return !&modified
