@@ -21,10 +21,12 @@ set cpo&vim
 command! -bar AutoChmodDisable let b:disable_auto_chmod = 1
 command! -bar AutoChmodEnable  unlet! b:disable_auto_chmod
 
-augroup autochmodx
-    autocmd!
-    autocmd BufWritePost * call s:auto_chmod()
-augroup END
+if !get(g:, 'authchmodx_no_autocmd')
+    augroup autochmodx
+        autocmd!
+        autocmd BufWritePost * call s:auto_chmod()
+    augroup END
+endif
 
 function! s:check_auto_chmod() "{{{
     return !exists('b:disable_auto_chmod')
