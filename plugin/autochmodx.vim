@@ -56,14 +56,6 @@ function! s:auto_chmod_run() "{{{
         return
     endif
 
-    " Prevent |W16| prompt.
-    " XXX: 'setlocal autoread' and
-    " 'setglobal autoread' and
-    " 'autocmd FileChangedShell' also do not work.
-    " This is expected behavior?
-    let save_global_autoread = &g:autoread
-    let save_local_autoread  = &l:autoread
-    set autoread
     try
         silent execute '!chmod '.g:autochmodx_chmod_opt.' %'
         " Reload buffer.
@@ -72,14 +64,6 @@ function! s:auto_chmod_run() "{{{
         syntax enable
     catch
         return
-    finally
-        if save_global_autoread ==# save_local_autoread
-            let &g:autoread = save_global_autoread
-            set autoread<
-        else
-            let &l:autoread = save_local_autoread
-            let &g:autoread = save_global_autoread
-        endif
     endtry
 
     " Disable auto-commands when 'chmod +x' succeeded.
