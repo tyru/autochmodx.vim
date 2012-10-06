@@ -26,10 +26,10 @@ command! -bar AutoChmodDisable
 command! -bar AutoChmodEnable
 \   unlet! b:autochmodx_disable_autocmd
 command! -bar AutoChmodRun
-\   call s:auto_chmod_run()
+\   call autochmodx#make_it_executable()
 command! -bar AutoChmodRunAutocmd
 \   if !get(b:, 'autochmodx_disable_autocmd')
-\ |     call s:auto_chmod_run()
+\ |     call autochmodx#make_it_executable()
 \ | endif
 
 
@@ -42,46 +42,6 @@ augroup autochmodx
         autocmd CursorHold * AutoChmodRunAutocmd
     endif
 augroup END
-
-
-function! s:check_auto_chmod() "{{{
-    return !&modified
-    \   && filewritable(expand('%'))
-    \   && getfperm(expand('%'))[2] !=# 'x'
-    \   && getline(1) =~# '^#!'
-endfunction "}}}
-
-function! s:auto_chmod_run() "{{{
-    if !s:check_auto_chmod()
-        return
-    endif
-
-    try
-        silent execute '!chmod '.g:autochmodx_chmod_opt.' %'
-        " Reload buffer.
-        silent edit
-        " Load syntax.
-        syntax enable
-    catch
-        return
-    endtry
-
-    " Disable auto-commands when 'chmod +x' succeeded.
-    let b:autochmodx_disable_autocmd = 1
-
-    redraw
-    call s:echomsg('Special', 'chmod +x '.expand('%').' ... done.')
-    sleep 1
-endfunction "}}}
-
-function! s:echomsg(hl, msg) "{{{
-    execute 'echohl' a:hl
-    try
-        echomsg a:msg
-    finally
-        echohl None
-    endtry
-endfunction "}}}
 
 
 " Restore 'cpoptions' {{{
