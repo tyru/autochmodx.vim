@@ -7,6 +7,21 @@ set cpo&vim
 " }}}
 
 
+
+" Utility functions {{{1
+
+function! s:echomsg(hl, msg) "{{{
+    execute 'echohl' a:hl
+    try
+        echomsg a:msg
+    finally
+        echohl None
+    endtry
+endfunction "}}}
+
+
+" Functions {{{1
+
 function! autochmodx#make_it_executable() "{{{
     if !s:check_auto_chmod()
         return
@@ -37,14 +52,7 @@ function! s:check_auto_chmod() "{{{
     \   && getline(1) =~# '^#!'
 endfunction "}}}
 
-function! s:echomsg(hl, msg) "{{{
-    execute 'echohl' a:hl
-    try
-        echomsg a:msg
-    finally
-        echohl None
-    endtry
-endfunction "}}}
+" }}}1
 
 
 " Restore 'cpoptions' {{{
