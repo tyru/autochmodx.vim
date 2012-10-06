@@ -25,13 +25,15 @@ command! -bar AutoChmodExecute call s:auto_chmod()
 if !get(g:, 'authchmodx_no_autocmd')
     augroup autochmodx
         autocmd!
-        autocmd BufWritePost * call s:auto_chmod()
+        autocmd BufWritePost *
+        \   if !get(b:, 'disable_auto_chmod')
+        \ |     call s:auto_chmod()
+        \ | endif
     augroup END
 endif
 
 function! s:check_auto_chmod() "{{{
-    return !exists('b:disable_auto_chmod')
-    \   && getfperm(expand('%'))[2] !=# 'x'
+    return getfperm(expand('%'))[2] !=# 'x'
     \   && getline(1) =~# '^#!'
 endfunction "}}}
 
