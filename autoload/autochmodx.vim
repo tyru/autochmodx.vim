@@ -66,7 +66,7 @@ function! autochmodx#make_it_executable() "{{{
     let b:autochmodx_disable_autocmd = 1
 
     redraw
-    call s:echomsg('Special', 'chmod +x '.expand('%').' ... done.')
+    call s:echomsg('Special', 'chmod '.g:autochmodx_chmod_opt.' '.expand('%').' ... done.')
     sleep 1
 endfunction "}}}
 
