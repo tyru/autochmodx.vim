@@ -7,6 +7,11 @@ if (exists('g:loaded_autochmodx') && g:loaded_autochmodx) || &cp
 endif
 let g:loaded_autochmodx = 1
 " }}}
+" :finish when non-Unix environment or chmod is not in PATH {{{
+if !has('unix') || !executable('chmod')
+    finish
+endif
+" }}}
 " Saving 'cpoptions' {{{
 let s:save_cpo = &cpo
 set cpo&vim
@@ -23,10 +28,8 @@ augroup END
 
 function! s:check_auto_chmod() "{{{
     return !exists('b:disable_auto_chmod')
-    \   && has('unix')
     \   && getfperm(expand('%'))[2] !=# 'x'
     \   && getline(1) =~# '^#!'
-    \   && executable('chmod')
 endfunction "}}}
 
 function! s:auto_chmod() "{{{
