@@ -55,6 +55,20 @@ g:autochmodx_chmod_opt		(Default: "+x")
 	This {value} is passed to "chmod" argument: >
 	chmod {value} %
 <
+					*g:autochmodx_scriptish_file_patterns*
+g:autochmodx_scriptish_file_patterns		(Default: See below)
+	Regexp patterns specified in this variable
+	are determined as an executable script.
+
+	The default value is like the following.
+	(A patch or pull req are welcome :)
+>
+	let g:autochmodx_scriptish_file_patterns = [
+	\   '\c.*\.pl$',
+	\   '\c.*\.rb$',
+	\   '\c.*\.py$',
+	\]
+<
 					*g:autochmodx_no_BufWritePost_autocmd*
 g:autochmodx_no_BufWritePost_autocmd
 	If this variable is defined and non-zero,
