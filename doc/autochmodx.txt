@@ -75,6 +75,16 @@ g:autochmodx_scriptish_file_patterns		(Default: See below)
 	\   '\c.*\.sh$',
 	\]
 <
+
+					*g:autochmodx_ignore_scriptish_file_patterns*
+g:autochmodx_ignore_scriptish_file_patterns		(Default: See below)
+	Regexp patterns specified in this variable
+	are NOT determined as an executable script.
+
+	Because this variable is seen before
+	|g:autochmodx_scriptish_file_patterns|,
+	you can disable 'chmod +x' for specific filename.
+
 					*g:autochmodx_no_BufWritePost_autocmd*
 g:autochmodx_no_BufWritePost_autocmd
 	If this variable is defined and non-zero,
