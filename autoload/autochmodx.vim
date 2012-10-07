@@ -34,24 +34,22 @@ function! s:echomsg(hl, msg) "{{{
     endtry
 endfunction "}}}
 
-function! s:any(func_list, args) "{{{
-    for F in a:func_list
-        if call(F, a:args)
+function! s:any(list, expr) "{{{
+    for Val in a:list
+        let val = Val    " alias
+        if eval(a:expr)
             return 1
         endif
-        unlet! F
+        unlet! Val val
     endfor
     return 0
 endfunction "}}}
 
 
-" Validate/Setup global variables. {{{1
+" Validate global variables. {{{1
 
 function! s:initialize_variables() "{{{
     call s:validate_chmod_opt(g:autochmodx_chmod_opt)
-    call s:setup_file_pattern(
-    \   g:autochmodx_scriptish_file_patterns
-    \)
 endfunction "}}}
 
 " g:autochmodx_chmod_opt {{{2
@@ -64,32 +62,6 @@ function! s:validate_chmod_opt(opt) "{{{
         call s:echomsg('Error', "autochmodx: error: '".a:opt."' is invalid argument for chmod. disable plugin.")
         let s:autochmodx_disable = 1
     endif
-endfunction "}}}
-
-" }}}2
-" g:autochmodx_scriptish_file_patterns {{{2
-
-function! s:setup_file_pattern(patterns) "{{{
-    for i in range(len(a:patterns))
-        " make readable funcname for debug
-        let escaped_pattern = substitute(
-        \   a:patterns[i], '[^a-zA-Z0-9_]', '', 'g'
-        \)
-        " script-local function can be recognized
-        " only within this script. (by exists())
-        let funcname =
-        \   's:__scriptish_detector_for_'
-        \   . escaped_pattern
-        \   . '_'.i
-        execute join([
-        \   'function! '.funcname.'(bufnr, file)',
-        \       'return a:file =~# '.string(a:patterns[i]),
-        \   'endfunction',
-        \], "\n")
-        call autochmodx#register_scriptish_detector(
-        \   funcname
-        \)
-    endfor
 endfunction "}}}
 
 " }}}2
@@ -138,10 +110,17 @@ endfunction "}}}
 function! s:check_auto_chmod() "{{{
     let bufnr = bufnr('%')
     let file  = expand('%')
+    let file_patterns = g:autochmodx_scriptish_file_patterns
     return !&modified
     \   && filewritable(file)
     \   && getfperm(file)[2] !=# 'x'
-    \   && (getline(1) =~# '^#!' || s:any(s:scriptish_detectors, [bufnr, file]))
+    \   && (getline(1) =~# '^#!'
+    \       || s:any(
+    \           s:scriptish_detectors,
+    \           'call(Val, ['.bufnr.', '.string(file).'])')
+    \       || s:any(
+    \           file_patterns,
+    \           string(file).' =~# val'))
 endfunction "}}}
 
 function! autochmodx#register_scriptish_detector(Func) "{{{
