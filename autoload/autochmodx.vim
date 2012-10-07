@@ -1,6 +1,11 @@
 " vim:foldmethod=marker:fen:
 scriptencoding utf-8
 
+" :finish when non-Unix environment or chmod is not in PATH {{{
+if !has('unix') || !executable('chmod')
+    finish
+endif
+" }}}
 " Saving 'cpoptions' {{{
 let s:save_cpo = &cpo
 set cpo&vim
