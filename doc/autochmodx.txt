@@ -75,6 +75,7 @@ g:autochmodx_scriptish_file_patterns		(Default: See below)
 	\   '\c.*\.sh$',
 	\]
 <
+	NOTE: This variable is used to match for a fullpath.
 
 					*g:autochmodx_ignore_scriptish_file_patterns*
 g:autochmodx_ignore_scriptish_file_patterns		(Default: See below)
@@ -84,6 +85,8 @@ g:autochmodx_ignore_scriptish_file_patterns		(Default: See below)
 	Because this variable is seen before
 	|g:autochmodx_scriptish_file_patterns|,
 	you can disable 'chmod +x' for specific filename.
+
+	NOTE: This variable is used to match for a fullpath.
 
 					*g:autochmodx_no_BufWritePost_autocmd*
 g:autochmodx_no_BufWritePost_autocmd
@@ -134,6 +137,8 @@ autochmodx#register_scriptish_detector({func})
 	- be a |Funcref| or |String| which represents
 	  a callable function name.
 	- receive 2 arguments {bufnr}, {file} in order.
+	  - {bufnr} is buffer number.
+	  - {file} is a fullpath of a current file.
 	- return a |Number|. (zero or non-zero)
 
 	Example:
