@@ -22,6 +22,8 @@ let g:autochmodx_scriptish_file_patterns =
 \      '\c.*\.py$',
 \      '\c.*\.sh$',
 \   ]
+let g:autochmodx_ignore_scriptish_file_patterns =
+\   get(g:, 'autochmodx_ignore_scriptish_file_patterns', [])
 
 
 " Utility functions {{{1
@@ -114,16 +116,31 @@ endfunction "}}}
 function! s:check_auto_chmod() "{{{
     let bufnr = bufnr('%')
     let file  = expand('%')
-    let file_patterns = g:autochmodx_scriptish_file_patterns
-    return !&modified
-    \   && filewritable(file)
-    \   && getfperm(file)[2] !=# 'x'
-    \   &&    (s:any(
-    \           s:scriptish_detectors,
-    \           'call(Val, ['.bufnr.', '.string(file).'])')
-    \       || s:any(
-    \           file_patterns,
-    \           string(file).' =~# val'))
+    if &modified
+    \   || !filewritable(file)
+    \   || getfperm(file)[2] ==# 'x'
+        return 0
+    endif
+
+    if s:any(
+    \   g:autochmodx_ignore_scriptish_file_patterns,
+    \   string(file).' =~# val'
+    \)
+        return 0
+    endif
+
+    if s:any(
+    \       s:scriptish_detectors,
+    \       'call(Val, ['.bufnr.', '.string(file).'])'
+    \   )
+    \   || s:any(
+    \           g:autochmodx_scriptish_file_patterns,
+    \           string(file).' =~# val'
+    \   )
+        return 1
+    endif
+
+    return 0
 endfunction "}}}
 
 function! autochmodx#register_scriptish_detector(Func) "{{{
