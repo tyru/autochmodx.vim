@@ -10,6 +10,11 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 " }}}
+" Load plugin/autochmodx.vim at first {{{
+if !exists('g:loaded_autochmodx')
+    runtime! plugin/autochmodx.vim
+endif
+" }}}
 
 
 
