@@ -89,8 +89,11 @@ g:autochmodx_no_CursorHold_autocmd
 ------------------------------------------------------------------------------
 COMMANDS					*autochmodx-commands* {{{
 
-:AutoChmodDisable			*:AutoChmodDisable*
-	This disables auto-commands of autochmodx.
+:AutoChmodDisable[!]			*:AutoChmodDisable*
+	If ! was not given, this disables auto-commands
+	of autochmodx in a current buffer.
+	If ! was given, this disables auto-commands
+	of autochmodx in all buffers.
 	This does not influence |:AutoChmodRun| behavior.
 
 :AutoChmodEnable			*:AutoChmodEnable*
