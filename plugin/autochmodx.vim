@@ -20,11 +20,14 @@ set cpo&vim
 
 command! -bar -bang AutoChmodDisable
 \   let {<bang>0 ? "g" : "b"}:autochmodx_disable_autocmd = 1
+
 command! -bar AutoChmodEnable
 \   unlet! g:autochmodx_disable_autocmd
 \          b:autochmodx_disable_autocmd
+
 command! -bar AutoChmodRun
 \   call autochmodx#make_it_executable()
+
 command! -bar AutoChmodRunAutocmd
 \   if !get(g:, 'autochmodx_disable_autocmd')
 \   && !get(b:, 'autochmodx_disable_autocmd')
