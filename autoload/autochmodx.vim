@@ -50,6 +50,9 @@ endfunction "}}}
 
 function! s:initialize_variables() "{{{
     call s:validate_chmod_opt(g:autochmodx_chmod_opt)
+    call autochmodx#register_scriptish_detector(
+    \   'autochmodx#detect_scriptish_by_content'
+    \)
 endfunction "}}}
 
 " g:autochmodx_chmod_opt {{{2
@@ -114,8 +117,7 @@ function! s:check_auto_chmod() "{{{
     return !&modified
     \   && filewritable(file)
     \   && getfperm(file)[2] !=# 'x'
-    \   && (getline(1) =~# '^#!'
-    \       || s:any(
+    \   &&    (s:any(
     \           s:scriptish_detectors,
     \           'call(Val, ['.bufnr.', '.string(file).'])')
     \       || s:any(
@@ -137,6 +139,10 @@ endfunction "}}}
 function! s:is_function(Func) "{{{
     return type(a:Func) is type(function('tr'))
     \   || type(a:Func) is type("") && exists('*'.a:Func)
+endfunction "}}}
+
+function! autochmodx#detect_scriptish_by_content(bufnr, file) "{{{
+    return getbufline(a:bufnr, 1)[0] =~# '^#!'
 endfunction "}}}
 
 " }}}1
