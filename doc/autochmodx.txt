@@ -60,6 +60,11 @@ g:autochmodx_scriptish_file_patterns		(Default: See below)
 	Regexp patterns specified in this variable
 	are determined as an executable script.
 
+	This is a simple way to add a detection
+	for an executable file.
+	but if you want to detect by buffer content,
+	you must use |autochmodx#register_scriptish_detector()|.
+
 	The default value is like the following.
 	(A patch or pull req are welcome :)
 >
@@ -108,6 +113,9 @@ FUNCTIONS					*autochmodx-functions* {{{
 autochmodx#register_scriptish_detector({func})
 	Register a function to detect
 	a current buffer is executable script.
+
+	You can simply use |g:autochmodx_scriptish_file_patterns|
+	for a detection by filename matching.
 
 	{func} must:
 	- be a |Funcref| or |String| which represents
