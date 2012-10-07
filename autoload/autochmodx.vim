@@ -10,12 +10,17 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 " }}}
-" Load plugin/autochmodx.vim at first {{{
-if !exists('g:loaded_autochmodx')
-    runtime! plugin/autochmodx.vim
-endif
-" }}}
 
+
+" Global variables {{{1
+
+let g:autochmodx_chmod_opt = get(g:, 'autochmodx_chmod_opt', '+x')
+let g:autochmodx_scriptish_file_patterns =
+\   get(g:, 'autochmodx_scriptish_file_patterns', []) + [
+\      '\c.*\.pl$',
+\      '\c.*\.rb$',
+\      '\c.*\.py$',
+\   ]
 
 
 " Utility functions {{{1
@@ -40,14 +45,13 @@ function! s:any(func_list, args) "{{{
 endfunction "}}}
 
 
-" Validate global variables. {{{1
+" Validate/Setup global variables. {{{1
 
-if !exists('g:autochmodx_chmod_opt')
-    call s:echomsg('Error',
-    \   'autochmodx: error: '
-    \   . 'g:autochmodx_chmod_opt is not found...')
-    let s:autochmodx_disable = 1
-endif
+function! s:initialize_variables() "{{{
+    call s:validate_chmod_opt(g:autochmodx_chmod_opt)
+endfunction "}}}
+
+" g:autochmodx_chmod_opt {{{2
 
 function! s:check_chmod_opt(opt) "{{{
     return a:opt =~# '^[ugoa]*+x$'
@@ -58,17 +62,25 @@ function! s:validate_chmod_opt(opt) "{{{
         let s:autochmodx_disable = 1
     endif
 endfunction "}}}
-call s:validate_chmod_opt(g:autochmodx_chmod_opt)
+
+" }}}2
+
 
 
 " Variables {{{1
 
 let s:scriptish_detectors = []
+let s:variables_were_initialized = 0
 
 
 " Functions {{{1
 
 function! autochmodx#make_it_executable() "{{{
+    if !s:variables_were_initialized
+        call s:initialize_variables()
+        let s:variables_were_initialized = 1
+    endif
+
     if get(s:, 'autochmodx_disable')
         call s:echomsg('WarningMsg', "autochmodx is disabled.")
         return

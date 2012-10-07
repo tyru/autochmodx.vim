@@ -18,9 +18,6 @@ set cpo&vim
 " }}}
 
 
-let g:autochmodx_chmod_opt = get(g:, 'autochmodx_chmod_opt', '+x')
-
-
 command! -bar AutoChmodDisable
 \   let b:autochmodx_disable_autocmd = 1
 command! -bar AutoChmodEnable
