@@ -49,7 +49,7 @@ if !exists('g:autochmodx_chmod_opt')
     let s:autochmodx_disable = 1
 endif
 
-function s:check_chmod_opt(opt) "{{{
+function! s:check_chmod_opt(opt) "{{{
     return a:opt =~# '^[ugoa]*+x$'
 endfunction "}}}
 function! s:validate_chmod_opt(opt) "{{{
