@@ -115,7 +115,7 @@ endfunction "}}}
 
 function! s:check_auto_chmod() "{{{
     let bufnr = bufnr('%')
-    let file  = expand('%')
+    let file  = expand('%:p')
     if &modified
     \   || !filewritable(file)
     \   || getfperm(file)[2] ==# 'x'
