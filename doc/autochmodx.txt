@@ -25,6 +25,7 @@ Requirements		|autochmodx-requirements|
 Interface			|autochmodx-interface|
   Variables			|autochmodx-variables|
   Commands			|autochmodx-commands|
+  Functions			|autochmodx-functions|
 TODO				|autochmodx-todo|
 Changelog			|autochmodx-changelog|
 
@@ -83,6 +84,32 @@ COMMANDS					*autochmodx-commands* {{{
 	Run "chmod +x %" unless |:AutoChmodDisable|
 	has been called in current buffer.
 	This command is called by auto-commands.
+
+}}}
+------------------------------------------------------------------------------
+FUNCTIONS					*autochmodx-functions* {{{
+
+			*autochmodx#register_scriptish_detector()*
+autochmodx#register_scriptish_detector({func})
+	Register a function to detect
+	a current buffer is executable script.
+
+	{func} must:
+	- be a |Funcref| or |String| which represents
+	  a callable function name.
+	- receive 2 arguments {bufnr}, {file} in order.
+	- return a |Number|. (zero or non-zero)
+
+	Example:
+>
+	function! DetectScriptish(bufnr, file)
+		" Detect Perl script is executable.
+		return a:file =~? '\.pl$'
+	endfunction
+	call autochmodx#register_scriptish_detector('DetectScriptish')
+	" or
+	" call autochmodx#register_scriptish_detector(function('DetectScriptish'))
+<
 
 }}}
 }}}
