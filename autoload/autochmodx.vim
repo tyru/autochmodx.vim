@@ -49,6 +49,9 @@ endfunction "}}}
 
 function! s:initialize_variables() "{{{
     call s:validate_chmod_opt(g:autochmodx_chmod_opt)
+    call s:setup_file_pattern(
+    \   g:autochmodx_scriptish_file_patterns
+    \)
 endfunction "}}}
 
 " g:autochmodx_chmod_opt {{{2
@@ -64,7 +67,32 @@ function! s:validate_chmod_opt(opt) "{{{
 endfunction "}}}
 
 " }}}2
+" g:autochmodx_scriptish_file_patterns {{{2
 
+function! s:setup_file_pattern(patterns) "{{{
+    for i in range(len(a:patterns))
+        " make readable funcname for debug
+        let escaped_pattern = substitute(
+        \   a:patterns[i], '[^a-zA-Z0-9_]', '', 'g'
+        \)
+        " script-local function can be recognized
+        " only within this script. (by exists())
+        let funcname =
+        \   's:__scriptish_detector_for_'
+        \   . escaped_pattern
+        \   . '_'.i
+        execute join([
+        \   'function! '.funcname.'(bufnr, file)',
+        \       'return a:file =~# '.string(a:patterns[i]),
+        \   'endfunction',
+        \], "\n")
+        call autochmodx#register_scriptish_detector(
+        \   funcname
+        \)
+    endfor
+endfunction "}}}
+
+" }}}2
 
 
 " Variables {{{1
