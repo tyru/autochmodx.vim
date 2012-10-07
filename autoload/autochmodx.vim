@@ -20,6 +20,7 @@ let g:autochmodx_scriptish_file_patterns =
 \      '\c.*\.pl$',
 \      '\c.*\.rb$',
 \      '\c.*\.py$',
+\      '\c.*\.sh$',
 \   ]
 
 

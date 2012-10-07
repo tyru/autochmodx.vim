@@ -67,6 +67,7 @@ g:autochmodx_scriptish_file_patterns		(Default: See below)
 	\   '\c.*\.pl$',
 	\   '\c.*\.rb$',
 	\   '\c.*\.py$',
+	\   '\c.*\.sh$',
 	\]
 <
 					*g:autochmodx_no_BufWritePost_autocmd*
