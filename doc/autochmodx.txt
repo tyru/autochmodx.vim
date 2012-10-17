@@ -2,7 +2,7 @@
 
 Author:
   tyru <tyru.exe@gmail.com>
-Version: 0.0.0
+Version: 1.0.0
 License:
 " NEW BSD LICENSE {{{
 "   Copyright (c) 2012, tyru
@@ -167,6 +167,9 @@ CHANGELOG						*autochmodx-changelog* {{{
 
 0.0.0:
 - Upload to github.
+
+1.0.0:
+- Upload to www.vim.org .
 
 }}}
 ==============================================================================
