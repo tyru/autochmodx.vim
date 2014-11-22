@@ -16,12 +16,12 @@ set cpo&vim
 
 let g:autochmodx_chmod_opt = get(g:, 'autochmodx_chmod_opt', '+x')
 let g:autochmodx_scriptish_file_patterns =
-\   get(g:, 'autochmodx_scriptish_file_patterns', []) + [
+\   get(g:, 'autochmodx_scriptish_file_patterns', [
 \      '\c.*\.pl$',
 \      '\c.*\.rb$',
 \      '\c.*\.py$',
 \      '\c.*\.sh$',
-\   ]
+\   ])
 let g:autochmodx_ignore_scriptish_file_patterns =
 \   get(g:, 'autochmodx_ignore_scriptish_file_patterns', [])
 
@@ -161,6 +161,12 @@ endfunction "}}}
 
 function! autochmodx#detect_scriptish_by_content(bufnr, file) "{{{
     return getbufline(a:bufnr, 1)[0] =~# '^#!'
+endfunction "}}}
+
+function! autochmodx#detect_scriptish_by_main(bufnr, file) "{{{
+    let buf = join(getbufline(a:bufnr, 1, '$'), "\n")
+    return ((a:file =~# '\.py$' && buf =~# 'if\s\+\(__name__\s*==\s*''__main__''\|''__main__''\s*==\s*__name__\)\s*:')
+    \   ||  (a:file =~# '\.rb$' && buf =~# 'if\s\+\(__FILE__\s*==\s*$0\|$0\s*==\s*__FILE__\)'))
 endfunction "}}}
 
 " }}}1
